@@ -8,9 +8,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tresjs/cientos": "^3.5.1",
+    "@tresjs/core": "^3.5.0",
+    "file-saver": "^2.0.5",
     "heic-decode": "^1.1.2",
-    "three": "^0.134.0",
-    "troisjs": "^0.3.4",
+    "three": "^0.158.0",
+    "three-addons": "^1.2.0",
     "vue": "^3.3.4"
   },
   "devDependencies": {

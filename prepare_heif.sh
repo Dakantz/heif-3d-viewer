@@ -8,8 +8,10 @@ source ./emsdk_env.sh
 emsdk install latest-upstream
 cd ..
 
-git clone https://github.com/strukturag/libheif.git
+git clone git@github.com:Dakantz/libheif.git
+git fetch
 cd libheif
+git switch feature/emscripten-fixes-and-depth
 mkdir buildjs
 cd buildjs
 bash
