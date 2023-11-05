@@ -11,13 +11,17 @@ export class HeifDecodedImg {
         this.dept_handles = this.libheif.heif_js_get_depth_imgs_decoded(this.img.handle)
         console.log("depths:", this.dept_handles);
         this.img_data = this.libheif.heif_js_decode_image2(this.img.handle, this.libheif.heif_colorspace_RGB, this.libheif.heif_chroma_interleaved_RGBA)
-        this.depth_data = this.libheif.heif_js_decode_image2(this.dept_handles[0], this.libheif.heif_colorspace_monochrome, this.libheif.heif_chroma_monochrome)
-        console.log("decoded depths:", this.depth_data);
         console.log("img_data:", this.img_data);
+        if (this.dept_handles.length == 0) {
+            alert("Please upload a HEIC-file with depth information!")
+        } else {
+            this.depth_data = this.libheif.heif_js_decode_image2(this.dept_handles[0], this.libheif.heif_colorspace_monochrome, this.libheif.heif_chroma_monochrome)
+            console.log("decoded depths:", this.depth_data);
+        }
     }
     iloc(img, x, y, pixel_depth) {
         let data = [];
-        let channel=img.channels[0]
+        let channel = img.channels[0]
         for (let i = 0; i < pixel_depth; i++) {
             data.push(channel.data[y * channel.stride + x * pixel_depth + i]);
         }

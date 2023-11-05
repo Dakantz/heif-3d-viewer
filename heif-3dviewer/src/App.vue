@@ -102,7 +102,7 @@ const update3DView = function () {
         <i class="fas fa-file-alt"></i>
         <div class="details">
           <h3>Select a file</h3>
-          <p>Select a file to view it in 3D.</p>
+          <p>Select a file to view it in 3D (you have to first save it in the camera roll as an 'Unmodified Original' to your files!)</p>
           <input type="file" id="heif_file" name="heif_file" accept=".heic" @change="initLoad" />
         </div>
       </div>
@@ -123,7 +123,7 @@ const update3DView = function () {
 <style scoped>
 .header {
 
-  padding: 0 20px;
+  padding:  20px;
   height: 10vh;
   font-family: 'Courier New', Courier, monospace;
   text-align: center;
@@ -134,7 +134,7 @@ const update3DView = function () {
   max-width: 1200px;
   height: 85vh;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 20px;
   font-family: 'Courier New', Courier, monospace;
   background-color: #c6c5c5;
 }
