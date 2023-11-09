@@ -128,6 +128,7 @@ const update3DView = function () {
   const texture = new THREE.DataTexture(img.img_data.channels[0].data, img.img_data.width, img.img_data.height, THREE.RGBAFormat);
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
+  texture.colorSpace = THREE.SRGBColorSpace;
   texture.needsUpdate = true;
 
   const material = new THREE.MeshBasicMaterial({ map: texture });
