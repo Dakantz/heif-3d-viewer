@@ -14,6 +14,7 @@
     "heic-decode": "^1.1.2",
     "three": "^0.158.0",
     "three-addons": "^1.2.0",
+    "tweakpane": "^4.0.5",
     "vue": "^3.3.4"
   },
   "devDependencies": {

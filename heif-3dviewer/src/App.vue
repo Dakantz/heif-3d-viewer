@@ -6,6 +6,13 @@ import HeifViewer from './components/HeifViewer.vue'
 
 
 const file = new hh.HeifFile();
+const default_imgs = {
+  'Face': '/IMG_0749.HEIC',
+  'Christmas': '/IMG_0756.HEIC',
+  'Vase': '/IMG_5345.HEIC',
+  'Column 1': '/IMG_5426.HEIC',
+  'Column 2': '/IMG_5426.HEIC'
+}
 const fileUrl = "/IMG_0749.HEIC";
 const heif_imgs = ref([])
 const textCanvas = ref(null)
@@ -23,11 +30,7 @@ const initLoad = async function (evt) {
 }
 
 onMounted(async () => {
-  const heic_fetch = await fetch(fileUrl);
-  const heic_binary = await heic_fetch.arrayBuffer();
-  await file.load(heic_binary);
-  heif_imgs.value = file.heif_imgs
-  console.log("heif_imgs set to:", heif_imgs.value)
+  setImg(default_imgs['Column 2'])
 
 })
 
@@ -35,6 +38,14 @@ const heifViwerRef = ref(null);
 const exportObj = function () {
   console.log("exportObj")
   heifViwerRef.value.exportObj()
+}
+const setImg = async function (url) {
+  console.log("setImg:", url)
+  const heic_fetch = await fetch(url);
+  const heic_binary = await heic_fetch.arrayBuffer();
+  file.heif_imgs = []
+  await file.load(heic_binary);
+  heif_imgs.value = file.heif_imgs
 }
 </script>
 
@@ -53,10 +64,13 @@ const exportObj = function () {
         <div class="details">
           <h3>Select a file</h3>
           <p>Select a file to view it in 3D (you have to first save it in the camera roll as an 'Unmodified Original' to
-            your files!) <br/>
+            your files!) <br />
             The HEIC files need to be captured either in Portrait mode or an iPhone 15 with a subject in frame.
           </p>
-          <input class="button" type="file" id="heif_file" name="heif_file" accept=".heic" @change="initLoad" />
+          <div class="input_sel">
+            <input class="button" type="file" id="heif_file" name="heif_file" accept=".heic" @change="initLoad" />
+            <button v-for="(v, k) of default_imgs" @click="setImg(v)" class="button">Set {{ k }}</button>
+          </div>
         </div>
         <button @click="exportObj" class="button">Export OBJ</button>
       </div>
@@ -96,12 +110,19 @@ const exportObj = function () {
   font-family: 'Courier New', Courier, monospace;
   background-color: #c6c5c5;
 }
-.button{
+
+.button {
   background-color: #ececec;
   font-family: 'Courier New', Courier, monospace;
   padding: 5px 10px;
   border: black solid 1px;
   margin: 5px;
 
+}
+.input_sel {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
 }
 </style>

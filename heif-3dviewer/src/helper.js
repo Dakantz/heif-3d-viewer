@@ -31,7 +31,7 @@ export class HeifDecodedImg {
 export class HeifFile {
     file = ""
     libheif = null
-    decoder = null
+    dec = null
     heif_imgs = []
     constructor() {
         (async () => {
@@ -46,19 +46,19 @@ export class HeifFile {
 
             }
 
-            this.libheif = libheif(m);
+            this.libheif = await libheif(m);
             console.log("heif library:", this.libheif);
-            this.decoder = new this.libheif.HeifDecoder();
-            console.log("heif decoder", this.decoder);
+            this.dec = new this.libheif.HeifDecoder();
+            console.log("heif decoder", this.dec);
         })();
     }
     async load(buffer) {
         console.log("buffer to load:", buffer);
 
-        this.decoded_imgs = await this.decoder.decode(buffer);
+        this.decoded_imgs = await this.dec.decode(buffer);
         console.log("decoded image:", this.decoded_imgs);
         for (const img of this.decoded_imgs) {
-            this.heif_imgs.push(new HeifDecodedImg(this.libheif, img, this.decoder));
+            this.heif_imgs.push(new HeifDecodedImg(this.libheif, img, this.dec));
         }
 
     }
