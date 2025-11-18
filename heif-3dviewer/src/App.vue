@@ -11,11 +11,15 @@ const default_imgs = {
   'Christmas': '/IMG_0756.HEIC',
   'Vase': '/IMG_5345.HEIC',
   'Column 1': '/IMG_5426.HEIC',
-  'Column 2': '/IMG_5426.HEIC'
+  'Column 2': '/IMG_5427.HEIC'
 }
 const fileUrl = "/IMG_0749.HEIC";
 const heif_imgs = ref([])
 const textCanvas = ref(null)
+const ui_state = reactive({
+  loading: false,
+  error: null,
+})
 const initLoad = async function (evt) {
   console.log("event:", evt)
   console.log("path:", evt.value)
@@ -40,12 +44,14 @@ const exportObj = function () {
   heifViwerRef.value.exportObj()
 }
 const setImg = async function (url) {
+  ui_state.loading = true
   console.log("setImg:", url)
   const heic_fetch = await fetch(url);
   const heic_binary = await heic_fetch.arrayBuffer();
   file.heif_imgs = []
   await file.load(heic_binary);
   heif_imgs.value = file.heif_imgs
+  ui_state.loading = false
 }
 </script>
 
@@ -70,8 +76,10 @@ const setImg = async function (url) {
           <div class="input_sel">
             <input class="button" type="file" id="heif_file" name="heif_file" accept=".heic" @change="initLoad" />
             <button v-for="(v, k) of default_imgs" @click="setImg(v)" class="button">Set {{ k }}</button>
+            <div v-if="ui_state.loading">...</div>
           </div>
         </div>
+
         <button @click="exportObj" class="button">Export OBJ</button>
       </div>
 
@@ -118,6 +126,13 @@ const setImg = async function (url) {
   border: black solid 1px;
   margin: 5px;
 
+}
+.button:hover {
+  background-color: #d4d4d4;
+  cursor: pointer;
+}
+.button:active {
+  background-color: #bcbcbc;
 }
 .input_sel {
   margin-top: 10px;
