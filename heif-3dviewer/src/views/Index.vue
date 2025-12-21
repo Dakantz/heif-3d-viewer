@@ -10,6 +10,7 @@ const api = new Api({
 })
 
 const file = new hh.HeifFile();
+
 const default_imgs = {
     'Face': '/IMG_0749.HEIC',
     'Christmas': '/IMG_0756.HEIC',

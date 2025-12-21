@@ -49,29 +49,32 @@ export class HeifFile {
     heif_imgs = [] as HeifDecodedImg[]
     decoded_imgs = [] as any[]
     constructor() {
-        (async () => {
-            console.warn("HeifFile constructor");
-            //preload wasm
-            //https://web.dev/articles/loading-wasm
-            const fetchPromise = await fetch('/libheif.wasm');
-            const binary = await fetchPromise.arrayBuffer();
-            var m = {
-                ...libheif,
-                "wasmBinary": binary,
+    }
+    async preload() {
+        console.warn("HeifFile constructor");
+        //preload wasm
+        //https://web.dev/articles/loading-wasm
+        const fetchPromise = await fetch('/libheif.wasm');
+        const binary = await fetchPromise.arrayBuffer();
+        var m = {
+            ...libheif,
+            "wasmBinary": binary,
 
-            }
-            console.log("initializing libheif with wasm binary:", m, libheif);
-            this.libheif = await libheif(m) as heif_module;
-            if (!this.libheif) {
-                console.error("libheif failed to load!");
-                return;
-            }
-            console.log("heif library:", this.libheif);
-            this.dec = new (this.libheif as any).HeifDecoder();
-            console.log("heif decoder", this.dec);
-        })();
+        }
+        console.log("initializing libheif with wasm binary:", m, libheif);
+        this.libheif = await libheif(m) as heif_module;
+        if (!this.libheif) {
+            console.error("libheif failed to load!");
+            return;
+        }
+        console.log("heif library:", this.libheif);
+        this.dec = new (this.libheif as any).HeifDecoder();
+        console.log("heif decoder", this.dec);
     }
     async load(buffer: ArrayBuffer) {
+        if(!this.libheif){
+            await this.preload()
+        }
         console.log("buffer to load:", buffer);
 
         this.decoded_imgs = await this.dec.decode(buffer);
