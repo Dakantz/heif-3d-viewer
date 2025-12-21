@@ -13,5 +13,6 @@ ADD . /app
 WORKDIR /app
 
 EXPOSE 8015
-ENV DATA_DIR=/app/data
-CMD [ "python", "-m", "uvicorn", "backend:app", "--host", "0.0.0.0", "--port", "8015" ]
+ENV HEIF_BASE_PATH=/data
+ENV PATH="/app/.venv/bin:$PATH"
+CMD [ "python", "-m", "uvicorn", "api.app:app", "--host", "0.0.0.0", "--port", "8015" ]

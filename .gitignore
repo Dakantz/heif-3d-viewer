@@ -28,3 +28,4 @@ coverage
 *.sw?
 libheif
 emsdk
+**/data/*.heic
