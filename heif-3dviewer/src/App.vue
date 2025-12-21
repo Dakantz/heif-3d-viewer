@@ -1,7 +1,9 @@
 <template>
   <div class="header">
     <h1>HEIF 3D Viewer :)</h1>
-    <strong>Current route path:</strong> {{ $route.fullPath }}
+    <div v-if="$route.path != '/'">
+      <RouterLink :to="'/'">Back Home...</RouterLink>
+    </div>
   </div>
   <main>
     <RouterView />
