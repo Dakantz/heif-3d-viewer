@@ -1,122 +1,41 @@
-<script setup>
-import { reactive, computed, onMounted, ref, getCurrentInstance } from 'vue'
-import * as hh from "./helper.js"
-import HeifViewer from './components/HeifViewer.vue'
-
-
-
-const file = new hh.HeifFile();
-const default_imgs = {
-  'Face': '/IMG_0749.HEIC',
-  'Christmas': '/IMG_0756.HEIC',
-  'Vase': '/IMG_5345.HEIC',
-  'Column 1': '/IMG_5426.HEIC',
-  'Column 2': '/IMG_5427.HEIC'
-}
-const fileUrl = "/IMG_0749.HEIC";
-const heif_imgs = ref([])
-const textCanvas = ref(null)
-const ui_state = reactive({
-  loading: false,
-  error: null,
-})
-const initLoad = async function (evt) {
-  console.log("event:", evt)
-  console.log("path:", evt.value)
-  const fileInput = document.getElementById("heif_file");
-  if (fileInput.files.length > 0) {
-    console.log("file to load:", file);
-    let buffer = await fileInput.files[0].arrayBuffer();
-    file.heif_imgs = []
-    await file.load(buffer);
-    heif_imgs.value = file.heif_imgs
-  }
-}
-
-onMounted(async () => {
-  setImg(default_imgs['Column 2'])
-
-})
-
-const heifViwerRef = ref(null);
-const exportObj = function () {
-  console.log("exportObj")
-  heifViwerRef.value.exportObj()
-}
-const setImg = async function (url) {
-  ui_state.loading = true
-  console.log("setImg:", url)
-  const heic_fetch = await fetch(url);
-  const heic_binary = await heic_fetch.arrayBuffer();
-  file.heif_imgs = []
-  await file.load(heic_binary);
-  heif_imgs.value = file.heif_imgs
-  ui_state.loading = false
-}
-</script>
-
 <template>
-  <header>
-
-    <div class="header">
-      <h1>HEIF 3D Viewer</h1>
-    </div>
-  </header>
-
+  <div class="header">
+    <h1>HEIF 3D Viewer :)</h1>
+    <strong>Current route path:</strong> {{ $route.fullPath }}
+  </div>
   <main>
-    <div class="wrapper">
-      <div class="item">
-        <i class="fas fa-file-alt"></i>
-        <div class="details">
-          <h3>Select a file</h3>
-          <p>Select a file to view it in 3D (you have to first save it in the camera roll as an 'Unmodified Original' to
-            your files!) <br />
-            The HEIC files need to be captured either in Portrait mode or an iPhone 15 with a subject in frame.
-          </p>
-          <div class="input_sel">
-            <input class="button" type="file" id="heif_file" name="heif_file" accept=".heic" @change="initLoad" />
-            <button v-for="(v, k) of default_imgs" @click="setImg(v)" class="button">Set {{ k }}</button>
-            <div v-if="ui_state.loading">...</div>
-          </div>
-        </div>
-
-        <button @click="exportObj" class="button">Export OBJ</button>
-      </div>
-
-      <TresCanvas alpha>
-        <HeifViewer :heif_imgs="heif_imgs" :textCanvas="textCanvas" ref="heifViwerRef" />
-      </TresCanvas>
-
-      <canvas ref="textCanvas" hidden>
-      </canvas>
-      <!-- <renderer ref="renderer" antialias orbit-ctrl :resize="true" alpha>
-                            <camera :position="{ z: 2, x: 1 }"></camera>
-                            <scene ref="scene">
-                              <ambient-light intensity="1"></ambient-light>
-                              <point-light :position="{ x: 10, y: 10, z: 10 }"></point-light>
-                            </scene>
-                          </renderer> -->
-    </div>
+    <RouterView />
   </main>
 </template>
+<script setup lang="ts">
 
-<style scoped>
+</script>
+<style>
+body {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #c6c5c5;
+  text-align: center;
+}
+
 .header {
 
   padding: 20px;
   height: 10vh;
-  font-family: 'Courier New', Courier, monospace;
   text-align: center;
 
 }
 
 .wrapper {
   max-width: 1200px;
-  height: 85vh;
+  height: 70vh;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Courier New', Courier, monospace;
-  background-color: #c6c5c5;
+}
+
+.prominent {
+  background-color: #a4a4a4;
+  /* font-weight: bold; */
+  font-size: 1.3em;
 }
 
 .button {
@@ -127,17 +46,38 @@ const setImg = async function (url) {
   margin: 5px;
 
 }
+
 .button:hover {
   background-color: #d4d4d4;
   cursor: pointer;
 }
+
 .button:active {
   background-color: #bcbcbc;
 }
+
 .input_sel {
   margin-top: 10px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+}
+
+.loading_animation {
+  font-size: 2em;
+  font-weight: bold;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 </style>
